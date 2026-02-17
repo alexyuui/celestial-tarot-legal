@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head><title>TikTok Authorization</title></head>
+<body style="font-family:monospace;padding:40px;text-align:center;">
+<h2>TikTok Authorization Callback</h2>
+<p id="msg">Reading authorization code...</p>
+<pre id="code" style="font-size:24px;background:#f0f0f0;padding:20px;word-break:break-all;"></pre>
+<script>
+const params = new URLSearchParams(window.location.search);
+const code = params.get('code');
+const error = params.get('error');
+if (error) {
+  document.getElementById('msg').textContent = 'Authorization failed: ' + error;
+} else if (code) {
+  document.getElementById('msg').textContent = 'Copy this code and send it to 蹦蹦:';
+  document.getElementById('code').textContent = code;
+} else {
+  document.getElementById('msg').textContent = 'No code found in URL.';
+}
+</script>
+</body>
+</html>
