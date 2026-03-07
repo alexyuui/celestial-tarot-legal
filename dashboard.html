@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Celestial Tarot - Dashboard</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: linear-gradient(135deg, #0a0a2e 0%, #1a1a4e 50%, #2d1b69 100%); color: #fff; min-height: 100vh; }
+        .container { max-width: 800px; margin: 0 auto; padding: 40px 20px; }
+        .nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
+        .nav h1 { font-size: 1.5em; background: linear-gradient(90deg, #f5c542, #e8a0bf); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .nav .user { display: flex; align-items: center; gap: 10px; color: #b8b8d4; }
+        .nav .logout { color: #fe2c55; cursor: pointer; text-decoration: underline; background: none; border: none; font-size: 0.9em; }
+        .upload-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 40px; }
+        .upload-card h2 { margin-bottom: 25px; color: #f5c542; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; color: #b8b8d4; font-size: 0.9em; }
+        .form-group input[type="text"], .form-group textarea { width: 100%; padding: 12px 16px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; color: #fff; font-size: 1em; }
+        .form-group textarea { height: 80px; resize: vertical; }
+        .form-group input[type="text"]:focus, .form-group textarea:focus { outline: none; border-color: #f5c542; }
+        .drop-zone { border: 2px dashed rgba(255,255,255,0.2); border-radius: 16px; padding: 40px; text-align: center; cursor: pointer; transition: border-color 0.3s; }
+        .drop-zone:hover { border-color: #f5c542; }
+        .drop-zone.has-file { border-color: #25f4ee; background: rgba(37,244,238,0.05); }
+        .drop-zone .icon { font-size: 3em; margin-bottom: 10px; }
+        .drop-zone p { color: #b8b8d4; }
+        .drop-zone .filename { color: #25f4ee; font-weight: 600; margin-top: 10px; }
+        .publish-btn { width: 100%; padding: 16px; font-size: 1.1em; font-weight: 600; color: #fff; background: linear-gradient(135deg, #25f4ee, #fe2c55); border: none; border-radius: 50px; cursor: pointer; margin-top: 20px; transition: opacity 0.3s; }
+        .publish-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .publish-btn:hover:not(:disabled) { box-shadow: 0 8px 30px rgba(254,44,85,0.4); }
+        .status { margin-top: 20px; padding: 15px; border-radius: 10px; display: none; }
+        .status.success { display: block; background: rgba(37,244,238,0.1); border: 1px solid #25f4ee; color: #25f4ee; }
+        .status.error { display: block; background: rgba(254,44,85,0.1); border: 1px solid #fe2c55; color: #fe2c55; }
+        .status.loading { display: block; background: rgba(245,197,66,0.1); border: 1px solid #f5c542; color: #f5c542; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="nav">
+            <h1>✨ Celestial Tarot</h1>
+            <div class="user">
+                <span>👤 <span id="userName">Creator</span></span>
+                <button class="logout" id="logoutBtn">Disconnect</button>
+            </div>
+        </div>
+
+        <div class="upload-card">
+            <h2>📤 Publish Video to TikTok</h2>
+
+            <div class="form-group">
+                <label>Video Title</label>
+                <input type="text" id="videoTitle" placeholder="e.g. Aries Weekly Tarot Reading 3.9-3.15">
+            </div>
+
+            <div class="form-group">
+                <label>Description & Hashtags</label>
+                <textarea id="videoDesc" placeholder="e.g. This week's tarot guidance for Aries ♈ #tarot #astrology #aries"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Video File</label>
+                <div class="drop-zone" id="dropZone">
+                    <div class="icon">🎬</div>
+                    <p>Click or drag a video file here</p>
+                    <p style="font-size:0.8em; margin-top:5px; color:#666;">MP4 or MOV, up to 50MB</p>
+                    <div class="filename" id="fileName" style="display:none;"></div>
+                </div>
+                <input type="file" id="videoFile" accept="video/mp4,video/quicktime" style="display:none;">
+            </div>
+
+            <div class="form-group">
+                <label>Publish Mode</label>
+                <select id="publishMode" style="width:100%; padding:12px 16px; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); border-radius:10px; color:#fff; font-size:1em;">
+                    <option value="DIRECT_POST">Direct Post (publish immediately)</option>
+                    <option value="UPLOAD_TO_TIKTOK">Upload as Draft (edit in TikTok app)</option>
+                </select>
+            </div>
+
+            <button class="publish-btn" id="publishBtn" disabled>🚀 Publish to TikTok</button>
+
+            <div class="status" id="status"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'https://celestial-tarot-api.onrender.com'; // Will update to VPS
+        const token = sessionStorage.getItem('tiktok_access_token');
+
+        if (!token) { window.location.href = 'index.html'; }
+
+        document.getElementById('userName').textContent = sessionStorage.getItem('tiktok_display_name') || 'Creator';
+
+        // File handling
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('videoFile');
+        let selectedFile = null;
+
+        dropZone.addEventListener('click', () => fileInput.click());
+        dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.style.borderColor = '#f5c542'; });
+        dropZone.addEventListener('dragleave', () => { dropZone.style.borderColor = selectedFile ? '#25f4ee' : 'rgba(255,255,255,0.2)'; });
+        dropZone.addEventListener('drop', e => { e.preventDefault(); handleFile(e.dataTransfer.files[0]); });
+        fileInput.addEventListener('change', e => handleFile(e.target.files[0]));
+
+        function handleFile(file) {
+            if (!file) return;
+            selectedFile = file;
+            dropZone.classList.add('has-file');
+            document.getElementById('fileName').style.display = 'block';
+            document.getElementById('fileName').textContent = '✓ ' + file.name + ' (' + (file.size / 1048576).toFixed(1) + ' MB)';
+            checkReady();
+        }
+
+        function checkReady() {
+            document.getElementById('publishBtn').disabled = !(selectedFile && document.getElementById('videoTitle').value.trim());
+        }
+        document.getElementById('videoTitle').addEventListener('input', checkReady);
+
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            sessionStorage.clear();
+            window.location.href = 'index.html';
+        });
+
+        // Publish
+        document.getElementById('publishBtn').addEventListener('click', async () => {
+            const btn = document.getElementById('publishBtn');
+            const status = document.getElementById('status');
+            btn.disabled = true;
+            btn.textContent = '⏳ Publishing...';
+            status.className = 'status loading';
+            status.textContent = 'Uploading video to TikTok...';
+
+            const formData = new FormData();
+            formData.append('video', selectedFile);
+            formData.append('title', document.getElementById('videoTitle').value);
+            formData.append('description', document.getElementById('videoDesc').value);
+            formData.append('publish_mode', document.getElementById('publishMode').value);
+            formData.append('access_token', token);
+
+            try {
+                const resp = await fetch(API_BASE + '/api/video/publish', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await resp.json();
+                if (data.success) {
+                    status.className = 'status success';
+                    status.textContent = '✓ Video published successfully to TikTok! Publish ID: ' + (data.publish_id || 'N/A');
+                    btn.textContent = '✓ Published!';
+                } else {
+                    throw new Error(data.error || 'Publish failed');
+                }
+            } catch (e) {
+                status.className = 'status error';
+                status.textContent = '✗ Error: ' + e.message;
+                btn.textContent = '🚀 Publish to TikTok';
+                btn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>

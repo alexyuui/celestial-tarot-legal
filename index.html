@@ -3,231 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Celestial Tarot - Weekly Cosmic Guide</title>
+    <title>Celestial Tarot - Publish to TikTok</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #0a0a2e 0%, #1a1a4e 50%, #0d0d3d 100%);
-            color: #fff;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .stars {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-image: radial-gradient(2px 2px at 20px 30px, #fff, transparent),
-                              radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
-                              radial-gradient(1px 1px at 90px 40px, #fff, transparent),
-                              radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.6), transparent),
-                              radial-gradient(2px 2px at 160px 30px, #fff, transparent);
-            background-size: 200px 100px;
-            z-index: 0;
-            opacity: 0.4;
-        }
-        .container {
-            position: relative;
-            z-index: 1;
-            max-width: 600px;
-            width: 90%;
-            text-align: center;
-            padding: 60px 20px;
-        }
-        .logo { font-size: 48px; margin-bottom: 10px; }
-        h1 {
-            font-size: 32px;
-            font-weight: 700;
-            margin-bottom: 8px;
-            background: linear-gradient(135deg, #f0c27f, #fc5c7d);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .tagline {
-            font-size: 16px;
-            color: rgba(255,255,255,0.7);
-            margin-bottom: 40px;
-        }
-        .features {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin-bottom: 40px;
-            text-align: left;
-        }
-        .feature {
-            background: rgba(255,255,255,0.08);
-            border-radius: 12px;
-            padding: 20px;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        .feature-icon { font-size: 24px; margin-bottom: 8px; }
-        .feature h3 { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
-        .feature p { font-size: 12px; color: rgba(255,255,255,0.6); line-height: 1.4; }
-        .login-section {
-            background: rgba(255,255,255,0.05);
-            border-radius: 16px;
-            padding: 32px;
-            border: 1px solid rgba(255,255,255,0.1);
-            margin-bottom: 30px;
-        }
-        .login-section h2 {
-            font-size: 18px;
-            margin-bottom: 8px;
-        }
-        .login-section p {
-            font-size: 13px;
-            color: rgba(255,255,255,0.6);
-            margin-bottom: 20px;
-        }
-        .tiktok-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            background: #fff;
-            color: #000;
-            font-size: 16px;
-            font-weight: 600;
-            padding: 14px 32px;
-            border-radius: 8px;
-            text-decoration: none;
-            transition: transform 0.2s, box-shadow 0.2s;
-            cursor: pointer;
-            border: none;
-        }
-        .tiktok-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(255,255,255,0.15);
-        }
-        .tiktok-btn svg { width: 24px; height: 24px; }
-        .social-links {
-            margin-top: 20px;
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-        }
-        .social-links a {
-            color: rgba(255,255,255,0.5);
-            text-decoration: none;
-            font-size: 13px;
-            transition: color 0.2s;
-        }
-        .social-links a:hover { color: #fff; }
-        footer {
-            position: relative;
-            z-index: 1;
-            padding: 20px;
-            font-size: 12px;
-            color: rgba(255,255,255,0.3);
-        }
-        footer a { color: rgba(255,255,255,0.4); text-decoration: none; }
-        footer a:hover { color: rgba(255,255,255,0.7); }
-        .status-msg {
-            margin-top: 16px;
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 13px;
-            display: none;
-        }
-        .status-msg.success {
-            display: block;
-            background: rgba(76,175,80,0.15);
-            border: 1px solid rgba(76,175,80,0.3);
-            color: #81c784;
-        }
-        .status-msg.error {
-            display: block;
-            background: rgba(244,67,54,0.15);
-            border: 1px solid rgba(244,67,54,0.3);
-            color: #e57373;
-        }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: linear-gradient(135deg, #0a0a2e 0%, #1a1a4e 50%, #2d1b69 100%); color: #fff; min-height: 100vh; }
+        .container { max-width: 960px; margin: 0 auto; padding: 40px 20px; }
+        header { text-align: center; margin-bottom: 60px; }
+        header h1 { font-size: 2.5em; margin-bottom: 10px; background: linear-gradient(90deg, #f5c542, #e8a0bf); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        header p { font-size: 1.2em; color: #b8b8d4; }
+        .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-bottom: 60px; }
+        .feature { background: rgba(255,255,255,0.05); border-radius: 16px; padding: 30px; text-align: center; border: 1px solid rgba(255,255,255,0.1); }
+        .feature .icon { font-size: 2.5em; margin-bottom: 15px; }
+        .feature h3 { margin-bottom: 10px; color: #f5c542; }
+        .feature p { color: #b8b8d4; font-size: 0.95em; line-height: 1.5; }
+        .cta { text-align: center; }
+        .cta-btn { display: inline-block; padding: 18px 48px; font-size: 1.2em; font-weight: 600; color: #fff; background: linear-gradient(135deg, #25f4ee, #fe2c55); border: none; border-radius: 50px; cursor: pointer; text-decoration: none; transition: transform 0.2s, box-shadow 0.2s; }
+        .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(254,44,85,0.4); }
+        footer { text-align: center; margin-top: 80px; color: #666; font-size: 0.85em; }
+        footer a { color: #b8b8d4; }
+        @media (max-width: 768px) { .features { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
-    <div class="stars"></div>
     <div class="container">
-        <div class="logo">✨🔮✨</div>
-        <h1>Celestial Tarot</h1>
-        <p class="tagline">Your Weekly Cosmic Guide — Astrology Meets Tarot</p>
-
+        <header>
+            <h1>✨ Celestial Tarot</h1>
+            <p>A content platform for astrology creators to publish tarot reading videos to TikTok</p>
+        </header>
         <div class="features">
             <div class="feature">
-                <div class="feature-icon">🌟</div>
-                <h3>12 Zodiac Signs</h3>
-                <p>Weekly tarot readings for every sign, powered by real planetary transits.</p>
+                <div class="icon">🔮</div>
+                <h3>Create Content</h3>
+                <p>Upload your tarot reading videos with custom titles, descriptions and cover images.</p>
             </div>
             <div class="feature">
-                <div class="feature-icon">🃏</div>
-                <h3>3-Card Spread</h3>
-                <p>Challenge · Direction · Strength — your weekly cosmic roadmap.</p>
+                <div class="icon">📱</div>
+                <h3>Publish to TikTok</h3>
+                <p>Connect your TikTok account and publish videos directly to your profile with one click.</p>
             </div>
             <div class="feature">
-                <div class="feature-icon">🎬</div>
-                <h3>Video Readings</h3>
-                <p>Beautiful short-form videos with narration, published weekly.</p>
-            </div>
-            <div class="feature">
-                <div class="feature-icon">🌍</div>
-                <h3>Multi-Platform</h3>
-                <p>Available on TikTok, YouTube, and more.</p>
+                <div class="icon">📅</div>
+                <h3>Schedule Posts</h3>
+                <p>Plan your content calendar and schedule weekly zodiac readings for each sign.</p>
             </div>
         </div>
-
-        <div class="login-section">
-            <h2>Connect with TikTok</h2>
-            <p>Log in with your TikTok account to enable automatic video publishing to your profile.</p>
-            <a id="tiktok-login-btn" class="tiktok-btn" href="#">
-                <svg viewBox="0 0 24 24" fill="none">
-                    <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.11V9.01a6.27 6.27 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.34-6.34V8.75a8.18 8.18 0 004.76 1.52V6.84a4.87 4.87 0 01-1-.15z" fill="#000"/>
-                </svg>
-                Continue with TikTok
-            </a>
-            <div id="status-msg" class="status-msg"></div>
+        <div class="cta">
+            <a class="cta-btn" id="connectBtn" href="#">♪ Connect with TikTok</a>
+            <p style="margin-top: 20px; color: #888; font-size: 0.9em;">Sign in with your TikTok account to get started</p>
         </div>
-
-        <div class="social-links">
-            <a href="https://www.tiktok.com/@Celestia1Tarot" target="_blank">TikTok</a>
-            <a href="https://www.youtube.com/@CelestialTarot" target="_blank">YouTube</a>
-        </div>
+        <footer>
+            <p>© 2026 Celestial Tarot · <a href="terms.html">Terms of Service</a> · <a href="privacy.html">Privacy Policy</a></p>
+        </footer>
     </div>
-
-    <footer>
-        <p>© 2026 Celestial Tarot · <a href="terms.html">Terms</a> · <a href="privacy.html">Privacy</a></p>
-    </footer>
-
     <script>
         const CLIENT_KEY = 'aw4vny962zlimnzn';
         const REDIRECT_URI = 'https://alexyuui.github.io/celestial-tarot-legal/callback.html';
         const SCOPE = 'user.info.basic,video.publish,video.upload';
-
-        function generateCSRF() {
-            return Math.random().toString(36).substring(2, 15);
+        function generateState() {
+            const a = new Uint8Array(16); crypto.getRandomValues(a);
+            return Array.from(a, b => b.toString(16).padStart(2, '0')).join('');
         }
-
-        document.getElementById('tiktok-login-btn').addEventListener('click', function(e) {
+        document.getElementById('connectBtn').addEventListener('click', function(e) {
             e.preventDefault();
-            const csrfState = generateCSRF();
-            sessionStorage.setItem('tiktok_csrf', csrfState);
-
-            const authUrl = 'https://www.tiktok.com/v2/auth/authorize/' +
+            const state = generateState();
+            sessionStorage.setItem('tiktok_csrf_state', state);
+            window.location.href = 'https://www.tiktok.com/v2/auth/authorize/' +
                 '?client_key=' + CLIENT_KEY +
-                '&scope=' + encodeURIComponent(SCOPE) +
+                '&scope=' + SCOPE +
                 '&response_type=code' +
                 '&redirect_uri=' + encodeURIComponent(REDIRECT_URI) +
-                '&state=' + csrfState;
-
-            window.location.href = authUrl;
+                '&state=' + state;
         });
-
-        // Check if returning from callback
-        const params = new URLSearchParams(window.location.search);
-        if (params.get('auth') === 'success') {
-            const msg = document.getElementById('status-msg');
-            msg.className = 'status-msg success';
-            msg.textContent = '✅ TikTok account connected successfully! Videos will be published automatically.';
-            msg.style.display = 'block';
-        }
+        if (sessionStorage.getItem('tiktok_access_token')) window.location.href = 'dashboard.html';
     </script>
 </body>
 </html>
